@@ -8,9 +8,9 @@ const createRequest = (options = {}) => {
     try {
         if(options.method === "GET") {
             for(let key in options.data) {
-                options.url.searchParams.set(key, options.data[key]);
+                const url = options.url.searchParams.set(key, options.data[key]);
             }
-            xhr.open("GET", options.url);
+            xhr.open("GET", url);
             xhr.send();
         }
         else {
@@ -21,12 +21,9 @@ const createRequest = (options = {}) => {
             }
             xhr.send(formData);
         }
-        options.callback(xhr.response.error, xhr.response);
+        xhr.addEventListener("load", () => options.callback(xhr.response.error, xhr.response));
     }
     catch(error) {
-        console.error(error);
+        console.log(error);
     }
-    
-
-
 };
