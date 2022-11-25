@@ -4,6 +4,8 @@
  * создания нового дохода или расхода
  * */
 
+// const { application } = require("express");
+
 class TransactionsWidget {
   /**
    * Устанавливает полученный элемент
@@ -12,7 +14,11 @@ class TransactionsWidget {
    * необходимо выкинуть ошибку.
    * */
   constructor( element ) {
-
+    if(!element) {
+      throw new Error("Элемент не найден!")
+    }
+    this.element = element;
+    this.registerEvents();
   }
   /**
    * Регистрирует обработчики нажатия на
@@ -21,6 +27,17 @@ class TransactionsWidget {
    * экземпляра окна
    * */
   registerEvents() {
+    const createIncomeBtn = document.querySelector(".create-income-button");
+    const createExpenseBtn = document.querySelector(".create-expense-button");
 
+    createIncomeBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      App.getModal("newIncome").open();
+    })
+
+    createExpenseBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      App.getModal("newExpense").open();
+    })
   }
 }

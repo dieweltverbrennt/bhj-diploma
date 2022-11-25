@@ -17,11 +17,10 @@ class AccountsWidget {
     if(!element) {
       throw new Error("Элемент не найден!")
     }
-    else {
-      this.element = element;
-      this.registerEvents();
-      this.update();
-    }
+    this.element = element;
+    this.registerEvents();
+    this.update();
+
   }
 
   /**
@@ -38,11 +37,12 @@ class AccountsWidget {
       App.getModal("createAccount").open();
     });
 
-    const accounts = document.querySelectorAll(".account");
-    accounts.forEach(item => item.addEventListener("click"), e => {
+    this.element.addEventListener("click", (e) => {
       e.preventDefault();
-      this.onSelectAccount(item);
-    })
+      if(e.target.closest(".account")) {
+        this.onSelectAccount(e.target.closest(".account"));
+      }
+    });
   }
 
   /**
@@ -77,7 +77,7 @@ class AccountsWidget {
    * в боковой колонке
    * */
   clear() {
-    accounts.forEach(item => item.remove());
+    Array.from(document.querySelectorAll(".account")).forEach(item => item.remove())
   }
 
   /**
@@ -88,7 +88,10 @@ class AccountsWidget {
    * Вызывает App.showPage( 'transactions', { account_id: id_счёта });
    * */
   onSelectAccount( element ) {
-    
+    Array.from(document.querySelectorAll(".account")).forEach(item => item.classList.remove("active"));
+    element.classList.toggle("active");
+    const accountId = element.getAttribute("data-id");
+    App.showPage('transactions', { account_id: accountId });
   }
 
   /**
@@ -97,7 +100,14 @@ class AccountsWidget {
    * item - объект с данными о счёте
    * */
   getAccountHTML(item){
-
+    const accountItem = 
+    `<li class="account" data-id="${item.id}">
+      <a href="#">
+        <span>${item.name}</span> /
+        <span>${item.sum} ₽</span>
+      </a>
+    </li>`;
+    this.element.insertAdjacentHTML("beforeend", accountItem);
   }
 
   /**
@@ -107,6 +117,8 @@ class AccountsWidget {
    * и добавляет его внутрь элемента виджета
    * */
   renderItem(data){
-
+    for(let item of data) {
+      this.element.append(this.getAccountHTML(item));
+    }
   }
 }

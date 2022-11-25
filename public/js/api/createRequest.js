@@ -5,25 +5,32 @@
 const createRequest = (options = {}) => {
     const xhr = new XMLHttpRequest();
     xhr.responseType = "json";
+    const url = new URL(options.url, location.origin);
+    const formData = new FormData();
+    if(options.method === "GET") {
+        for(let key in options.data) {
+            url.searchParams.set(key, options.data[key]);
+        }
+    }
+    if(options.method != "GET") {
+        for(let key in options.data) {
+            formData.append(key, options.data[key]);
+        }
+    }
+
     try {
         if(options.method === "GET") {
-            for(let key in options.data) {
-                const url = options.url.searchParams.set(key, options.data[key]);
-            }
             xhr.open("GET", url);
             xhr.send();
         }
         else {
-            xhr.open(options.method, options.url);
-            const formData = new FormData();
-            for(let key in options.data) {
-                formData.append(key, options.data[key]);
-            }
+            xhr.open(options.method, url);
             xhr.send(formData);
         }
-        xhr.addEventListener("load", () => options.callback(xhr.response.error, xhr.response));
     }
     catch(error) {
-        console.log(error);
+        console.error(error)
     }
+
+    xhr.addEventListener("load", () => options.callback(xhr.response.error, xhr.response));
 };
