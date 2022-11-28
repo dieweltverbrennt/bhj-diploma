@@ -19,14 +19,8 @@ const createRequest = (options = {}) => {
     }
 
     try {
-        if(options.method === "GET") {
-            xhr.open("GET", url);
-            xhr.send();
-        }
-        else {
-            xhr.open(options.method, url);
-            xhr.send(formData);
-        }
+        xhr.open(options.method, url);
+        xhr.send(formData);
     }
     catch(error) {
         console.error(error)

@@ -100,14 +100,12 @@ class AccountsWidget {
    * item - объект с данными о счёте
    * */
   getAccountHTML(item){
-    const accountItem = 
-    `<li class="account" data-id="${item.id}">
+   return `<li class="account" data-id="${item.id}">
       <a href="#">
         <span>${item.name}</span> /
         <span>${item.sum} ₽</span>
       </a>
     </li>`;
-    this.element.insertAdjacentHTML("beforeend", accountItem);
   }
 
   /**
@@ -118,7 +116,7 @@ class AccountsWidget {
    * */
   renderItem(data){
     for(let item of data) {
-      this.element.append(this.getAccountHTML(item));
+      this.element.insertAdjacentHTML("beforeend", this.getAccountHTML(item));
     }
   }
 }

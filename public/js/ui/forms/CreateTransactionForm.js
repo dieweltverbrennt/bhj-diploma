@@ -26,13 +26,9 @@ class CreateTransactionForm extends AsyncForm {
         if(response.data) {
           const selectAccountForm = this.element.account_id;
 
-          const accountList = response.data.reduce((optionList, option) => {
-            optionList += `<option value="${option.id}">${option.name}</option>`;
-            return optionList;
+          selectAccountForm.innerHTML = response.data.reduce((optionList, option) => {
+            return optionList += `<option value="${option.id}">${option.name}</option>`;
           }, "");
-
-          selectAccountForm.innerHTML = accountList;
-
         }})
       }
   }

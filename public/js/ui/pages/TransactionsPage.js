@@ -182,7 +182,6 @@ class TransactionsPage {
    * item - объект с информацией о транзакции
    * */
   getTransactionHTML(item) {
-    // console.log(item)
     return `<div class="transaction transaction_${item.type} row">
     <div class="col-md-7 transaction__details">
       <div class="transaction__icon">
@@ -191,7 +190,7 @@ class TransactionsPage {
       <div class="transaction__info">
           <h4 class="transaction__title">${item.name}</h4>
           <!-- дата -->
-          <div class="transaction__date"${this.formatDate(item.created_at)}</div>
+          <div class="transaction__date">${this.formatDate(item.created_at)}</div>
       </div>
     </div>
     <div class="col-md-3">
@@ -215,13 +214,8 @@ class TransactionsPage {
    * */
   renderTransactions(data) {
     const transactionContent = document.querySelector(".content");
-    const transactionListHTML = data.reduce((transactionList, item) => {
-      transactionList += this.getTransactionHTML(item);
-      // console.log(transactionList)
-      return transactionList;
+    transactionContent.innerHTML = data.reduce((acc, item) => {
+      return acc += this.getTransactionHTML(item);
     }, "");
-
-    transactionContent.innerHTML = transactionListHTML;
-
   }
 }
